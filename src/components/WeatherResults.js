@@ -1,6 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import logo from '../logo.svg';
+import config from '../config.js';
+import moment from 'moment'
+
+
+
 
 
 
@@ -19,7 +24,7 @@ class WeatherResults extends React.Component {
   componentDidMount(){
     const that = this;
     setTimeout(function () {
-      axios.get('http://api.openweathermap.org/data/2.5/weather?zip=98166,us&APPID=&units=imperial')
+      axios.get('http://api.openweathermap.org/data/2.5/weather?zip=98166,us&APPID='+config.apiKey +'&units=imperial')
         .then(function(response) {
           that.setState({weather: response.data, loading: false});
           // const d = response.data
@@ -38,7 +43,9 @@ class WeatherResults extends React.Component {
         <div>
           <h2> {this.state.weather.name} </h2>
           <h3>{this.state.weather.main.temp}</h3>
-          <h4>{this.state.weather.dt}</h4>
+          <h4>{moment(this.state.weather.dt).format('MMMM Do YYYY, h:mm:ss a')}</h4>
+
+
 
         </div>
       )
@@ -46,7 +53,7 @@ class WeatherResults extends React.Component {
   }
 
   componentDidUpdate(){
-    console.log(this.state.weather.main.temp, "component did update");
+    console.log(this.state.weather.dt, "component did update");
   }
 
   render() {
