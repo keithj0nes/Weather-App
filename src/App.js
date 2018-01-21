@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import WeatherResults from './components/WeatherResults';
 
@@ -8,8 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          
-
+          <h1> Weather </h1>
         </header>
 
         <WeatherResults/>
