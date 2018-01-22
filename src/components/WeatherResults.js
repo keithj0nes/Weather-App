@@ -3,6 +3,8 @@ import axios from 'axios';
 import '../weather-icons-master/css/weather-icons.css';
 import config from '../config.js';
 import moment from 'moment'
+import '../styles/weather-results.css'
+
 
 class WeatherResults extends React.Component {
   constructor(){
@@ -53,13 +55,17 @@ class WeatherResults extends React.Component {
     //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.loading === false && Object.keys(this.state.weather).length > 0){
       return (
-        <div>
-          <h2> {this.state.weather.name} </h2>
-          <h3>{this.state.weather.main.temp}</h3>
-          <h4>{moment.unix(this.state.weather.dt).format('MMMM Do YYYY, h:mm:ss a')}</h4>
-          <h5>{this.state.weather.wind.speed + ' mph'}</h5>
-          <h6>{'Sunrise: ' + moment.unix(this.state.weather.sys.sunrise).format('h:mm a')}</h6>
-          <h6>{'Sunset: ' + moment.unix(this.state.weather.sys.sunset).format('h:mm a')}</h6>
+        <div className='main-content'>
+
+          <h1>Today in {this.state.weather.name} </h1>
+          <p className = 'temp'>{this.state.weather.main.temp.toFixed(0)}</p>
+          <p className ='icon'><i className=" wi wi-yahoo-32" alt="logo" style={{fontSize: '100px', background: 'pink', display:'inline-flex', justifyContent: 'center', alignItems: 'center'  }}> </i> </p>
+          <p className = 'description'>{this.state.weather.weather[0].description}</p>
+          <div className ='footer'>
+            <p className = 'wind'><i className="wi wi-cloudy-gusts" alt="logo"></i> <br/> {this.state.weather.wind.speed + ' mph'}</p>
+            <p className = 'sunrise'>{'Sunrise: ' + moment.unix(this.state.weather.sys.sunrise).format('h:mm a')}</p>
+            <p className = 'sunset'>{'Sunset: ' + moment.unix(this.state.weather.sys.sunset).format('h:mm a')}</p>
+          </div>
         </div>
       )
       //when loading is true, show the loadingIcon until data comes back
@@ -83,10 +89,9 @@ class WeatherResults extends React.Component {
       <div>
         <form onSubmit={this.handleSubmit}>
           <label>
-            Zip:
-            <input type="text" value={this.state.userZip} onChange={this.handleChange} />
+            <input type="text" value={this.state.userZip} onChange={this.handleChange} placeholder = 'Enter Zip Code'/>
           </label>
-          <input type="submit" value="Submit" />
+
         </form>
 
         {this.renderWeather()}
@@ -97,5 +102,6 @@ class WeatherResults extends React.Component {
 }
 
 
+// <p className = 'date'>{moment.unix(this.state.weather.dt).format('MMMM Do YYYY, h:mm a')}</p>
 
 export default WeatherResults;

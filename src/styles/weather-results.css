@@ -1,0 +1,28 @@
+
+.main-content h1{
+  padding: 20px;
+  background-color: red;
+  font-size: 36px;
+
+}
+
+.main-content p.temp{
+  font-size: 130px;
+  background-color: green;
+}
+
+.main-content p.description{
+  font-size: 30px;
+  background-color: yellow;
+  text-transform: capitalize;
+}
+
+.main-content .footer{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.main-content .footer i {
+  font-size: 50px;
+}

@@ -1,6 +1,11 @@
-body {
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: sans-serif;
+}
+
+body {
   background: linear-gradient(to right, #0fb8ad, #1fc8db, #2cb5e8);
+  
 }
