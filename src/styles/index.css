@@ -5,7 +5,18 @@
   font-family: sans-serif;
 }
 
-body {
-  background: linear-gradient(to right, #0fb8ad, #1fc8db, #2cb5e8);
-  
+html {
+  /* background: linear-gradient(to right, #0fb8ad, #1fc8db, #2cb5e8); */
+  background:
+    -webkit-linear-gradient(rgba(135, 60, 255, 1), rgba(135, 60, 255, 0.0) 0%),
+    -webkit-linear-gradient(-70deg, rgba(120, 155, 255, 0.9) 50%, rgba(55, 230, 235, 1) 0%);
+
 }
+
+/* .bg-skew {
+  background: tomato;
+  -webkit-transform: skew(0deg, -10deg);
+  transform: skew(0deg, -10deg);
+  padding: 200px 0;
+  margin-top: -190px;
+} */

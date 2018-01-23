@@ -48,9 +48,11 @@ class WeatherResults extends React.Component {
   }
 
 
+
+
   renderWeather(){
     //if our app is loading, show the loading icon
-    var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-yahoo-32" alt="logo" style={{fontSize: '120px'}}> </i> :  " "
+    var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
 
     //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.loading === false && Object.keys(this.state.weather).length > 0){
@@ -58,17 +60,18 @@ class WeatherResults extends React.Component {
         <div className='main-content'>
 
           <h1>Today in {this.state.weather.name} </h1>
-          <p className = 'temp'>{this.state.weather.main.temp.toFixed(0)}</p>
-          <p className ='icon'><i className=" wi wi-yahoo-32" alt="logo" style={{fontSize: '100px', background: 'pink', display:'inline-flex', justifyContent: 'center', alignItems: 'center'  }}> </i> </p>
+          <p className = 'temp'>{this.state.weather.main.temp.toFixed(0)} <i className="wi wi-fahrenheit" alt="logo"></i></p>
+          <p className ='icon'><i className=" wi wi-yahoo-32" alt="logo" style={{fontSize: '80px', display:'inline-flex', justifyContent: 'center', alignItems: 'center', padding: '10px'  }}> </i> </p>
           <p className = 'description'>{this.state.weather.weather[0].description}</p>
           <div className ='footer'>
-            <p className = 'wind'><i className="wi wi-cloudy-gusts" alt="logo"></i> <br/> {this.state.weather.wind.speed + ' mph'}</p>
-            <p className = 'sunrise'>{'Sunrise: ' + moment.unix(this.state.weather.sys.sunrise).format('h:mm a')}</p>
-            <p className = 'sunset'>{'Sunset: ' + moment.unix(this.state.weather.sys.sunset).format('h:mm a')}</p>
+            <p className = 'sunrise'>{moment.unix(this.state.weather.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
+            <p className = 'wind'>{this.state.weather.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
+            <p className = 'sunset'>{ moment.unix(this.state.weather.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
           </div>
         </div>
       )
       //when loading is true, show the loadingIcon until data comes back
+
     } else if(this.state.loading === true) {
       return (
         <div>
@@ -77,7 +80,9 @@ class WeatherResults extends React.Component {
       )
       //initial page load has no state - tell the user to search for their zip
     } else if(Object.keys(this.state.weather).length === 0){
-      return <h1>Search your zip code</h1>
+      return <h1 className = 'homeText'>Weather App <i className="wi wi-lightning" alt="logo"></i> </h1>
+
+
     }
 
     //we will also need to run an if this.state.error === true and display some code saying there was an error and to try again or something
@@ -86,7 +91,7 @@ class WeatherResults extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className = 'searchzip'>
         <form onSubmit={this.handleSubmit}>
           <label>
             <input type="text" value={this.state.userZip} onChange={this.handleChange} placeholder = 'Enter Zip Code'/>
@@ -97,6 +102,7 @@ class WeatherResults extends React.Component {
         {this.renderWeather()}
 
       </div>
+
     )
   }
 }

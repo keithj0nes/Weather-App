@@ -1,28 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa');
 
 .main-content h1{
   padding: 20px;
-  background-color: red;
-  font-size: 36px;
+  /* background-color: red; */
+  font-size: 30px;
+  font-family: 'Comfortaa';
+  color: black;
+
+
 
 }
 
 .main-content p.temp{
   font-size: 130px;
-  background-color: green;
+  /* background-color: green; */
+  font-family: 'Comfortaa';
+  color: black;
+}
+
+ p.temp i {
+  position: absolute;
+  top: 90px;
+  right: 50px;
+  font-size: 90px;
+  color: black;
 }
 
 .main-content p.description{
   font-size: 30px;
-  background-color: yellow;
+  /* background-color: yellow; */
   text-transform: capitalize;
+  font-family: 'Comfortaa';
+  padding-top:  10px;
+  padding-bottom: 25px;
+  color: black;
 }
 
 .main-content .footer{
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+  /* background-color: pink; */
+  font-family: 'Comfortaa';
+  color: black;
 }
 
 .main-content .footer i {
   font-size: 50px;
+  padding: 10px;
+  /* background-color: purple; */
+  align-items: center;
+  color: black;
+}
+
+ .searchzip{
+  
+
+
+ }
+
+h1.homeText{
+  padding-top: 30px;
+  font-family: 'Comfortaa';
+}
+
+h1.homeText i{
+  padding: 80px;
+  font-size: 120px;
 }
