@@ -89,6 +89,42 @@ handleInputChange(event) {
   renderWeather(){
     //if our app is loading, show the loading icon
     var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
+    var weatherIcon = null;
+    var des = Object.keys(this.state.weather).length > 0 ? this.state.weather.weather[0].description: null;
+
+    if(des ==='haze' ){
+      weatherIcon = "wi wi-day-haze"
+    } else if (des === 'light rain'){
+      weatherIcon = "wi wi-rain-mix"
+    } else if (des === 'few clouds'){
+    weatherIcon = "wi wi-cloud"
+    } else if (des === 'clear sky'){
+      weatherIcon = "wi wi-day-sunny"
+    } else if (des === 'overcast clouds'){
+      weatherIcon = "wi wi-cloudy"
+    } else if (des === 'light intensity drizzle'){
+      weatherIcon = "wi wi-rain-mix"
+    } else if (des === 'mist'){
+      weatherIcon = "wi wi-windy"
+    } else if (des === 'clear sky'){
+      weatherIcon = "wi wi-day-sunny"
+    } else if (des === 'fog'){
+      weatherIcon = "wi wi-fog"
+    } else if (des === 'broken clouds'){
+      weatherIcon = "wi wi-cloudy"
+    } else if (des === 'scattered clouds'){
+      weatherIcon = "wi wi-cloudy"
+    } else if (des === 'moderate rain'){
+      weatherIcon = "wi wi-rain"
+    } else if (des === 'light intensity drizzle rain'){
+      weatherIcon = "wi wi-rain-mix"
+    }else if (des === 'smoke'){
+      weatherIcon = "wi wi-smoke"
+    }
+
+
+
+
 
     //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.loading === false && Object.keys(this.state.weather).length > 0){
@@ -97,7 +133,8 @@ handleInputChange(event) {
 
           <h1>Today in {this.state.weather.name} </h1>
           <p className = 'temp'>{this.state.weather.main.temp.toFixed(0)} <i className="wi wi-fahrenheit" alt="logo"></i></p>
-          <p className ='icon'><i className=" wi wi-yahoo-32" alt="logo" style={{fontSize: '80px', display:'inline-flex', justifyContent: 'center', alignItems: 'center', padding: '10px'  }}> </i> </p>
+          <p className ='icon'>
+          <i className= {weatherIcon} alt="logo" style={{fontSize: '80px', display:'inline-flex', justifyContent: 'center', alignItems: 'center', padding: '10px'  }}> </i> </p>
           <p className = 'description'>{this.state.weather.weather[0].description}</p>
           <div className ='footer'>
             <p className = 'sunrise'>{moment.unix(this.state.weather.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
