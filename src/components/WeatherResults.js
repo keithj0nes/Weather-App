@@ -25,44 +25,63 @@ class WeatherResults extends React.Component {
     console.log('getin her')
     const that = this
 
+
     event.preventDefault()
     //setState loading to true when form is submitted - change to false after data gets back
-    this.setState({loading: true})
+    this.setState({
+      loading: true
+    })
+    if (event.target.name === 'userZip'){
+      // setTimeout for 2 second to show loading icon - not neccessary but looks cool
+      setTimeout(function() {
+        axios.get('http://api.openweathermap.org/data/2.5/weather?zip=' + that.state.userZip + ',us&APPID=' + config.apiKey + '&units=imperial')
+          .then(function(response) {
+            that.setState({
+              weather: response.data,
+              loading: false
+            });
+            // const d = response.data
+            console.log(response.data, 'here is the response');
+          })
+          .catch(function(error) {
+            that.setState({
+              error: true
+            })
+            console.log(error, 'here is the error');
+          });
+      }, 1000);
+    }
 
-    //setTimeout for 2 second to show loading icon - not neccessary but looks cool
-    setTimeout(function () {
-      axios.get('http://api.openweathermap.org/data/2.5/weather?zip=' + that.state.userZip +',us&APPID=' + config.apiKey +'&units=imperial')
-        .then(function(response) {
-          that.setState({weather: response.data, loading: false});
-          // const d = response.data
-          console.log(response.data, 'here is the response');
-        })
-        .catch(function(error) {
-          that.setState({error: true})
-          console.log(error, 'here is the error');
-        });
-    }, 1000);
+    else if(event.target.name === 'userCity') {
+      setTimeout(function() {
 
+        axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + that.state.userCity + '&APPID=' + config.apiKey + '&units=imperial')
 
-  setTimeout(function () {
-    axios.get('api.openweathermap.org/data/2.5/weather?q='+that.state.userName)
-      .then(function(response) {
-        that.setState({weather: response.data, loading: false});
-        // const d = response.data
-        console.log(response.data, 'here is the response');
-      })
-      .catch(function(error) {
-        that.setState({error: true})
-        console.log(error, 'here is the error');
-      });
-  }, 1000);
-}
-
-  handleInputChange(event) {
-    this.setState({[event.target.name]: event.target.value});
-    console.log(event.target.name, event.target.value);
-
+          .then(function(response) {
+            that.setState({
+              weather: response.data,
+              loading: false
+            });
+            // const d = response.data
+            console.log(response.data, 'here is the response');
+          })
+          .catch(function(error) {
+            that.setState({
+              error: true
+            })
+            console.log(error, 'here is the error');
+          });
+      }, 1000);
+    }
   }
+
+handleInputChange(event) {
+  this.setState({
+    [event.target.name]: event.target.value
+  });
+  console.log(event.target.name, event.target.value);
+
+}
 
 
 
@@ -113,14 +132,14 @@ class WeatherResults extends React.Component {
       {this.renderWeather()}
         {Object.keys(this.state.weather).length === 0?
           <div className = 'forms'>
-        <form onSubmit={this.handleFormSubmit}>
+        <form name = 'userZip' onSubmit={this.handleFormSubmit}>
           <label>
             <input name = 'userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder = 'Enter Zip Code'/>
             <br/>
           </label>
 
         </form>
-        <form onSubmit={this.handleFormSubmit}>
+        <form name = "userCity" onSubmit={this.handleFormSubmit}>
           <label>
             <input name = 'userCity' className = "city" type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder = 'Enter City Name'/>
           </label>
