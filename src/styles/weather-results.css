@@ -62,9 +62,6 @@
 
 }
 
- .searchzip{
-
- }
 
 h1.homeText{
   padding-top: 30px;
@@ -74,4 +71,19 @@ h1.homeText{
 h1.homeText i{
   padding: 40px;
   font-size: 160px;
+}
+.searchzip{
+
+}
+.searchzip input{
+  border-radius: 20px;
+  border: none;
+  /* height: 20px; */
+  text-align: center;
+  font-family: 'Comfortaa';
+  padding: 10px;
+
+}
+.searchzip input.city{
+  margin: 20px;
 }

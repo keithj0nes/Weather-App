@@ -13,14 +13,16 @@ class WeatherResults extends React.Component {
       weather: {},
       error: false,
       loading: false,
-      userZip: ''
+      userZip: '',
+      userCity: ''
     }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
 
-  handleSubmit(event) {
+  handleFormSubmit(event) {
+    console.log('getin her')
     const that = this
 
     event.preventDefault()
@@ -39,12 +41,27 @@ class WeatherResults extends React.Component {
           that.setState({error: true})
           console.log(error, 'here is the error');
         });
-    }, 2000);
-  }
+    }, 1000);
 
 
-  handleChange(event) {
-    this.setState({userZip: event.target.value});
+  setTimeout(function () {
+    axios.get('api.openweathermap.org/data/2.5/weather?q='+that.state.userName)
+      .then(function(response) {
+        that.setState({weather: response.data, loading: false});
+        // const d = response.data
+        console.log(response.data, 'here is the response');
+      })
+      .catch(function(error) {
+        that.setState({error: true})
+        console.log(error, 'here is the error');
+      });
+  }, 1000);
+}
+
+  handleInputChange(event) {
+    this.setState({[event.target.name]: event.target.value});
+    console.log(event.target.name, event.target.value);
+
   }
 
 
@@ -90,16 +107,29 @@ class WeatherResults extends React.Component {
 
 
   render() {
+    console.log(Object.keys(this.state.weather).length, 'weather');
     return (
       <div className = 'searchzip'>
-        <form onSubmit={this.handleSubmit}>
+      {this.renderWeather()}
+        {Object.keys(this.state.weather).length === 0?
+          <div className = 'forms'>
+        <form onSubmit={this.handleFormSubmit}>
           <label>
-            <input type="text" value={this.state.userZip} onChange={this.handleChange} placeholder = 'Enter Zip Code'/>
+            <input name = 'userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder = 'Enter Zip Code'/>
+            <br/>
           </label>
 
         </form>
+        <form onSubmit={this.handleFormSubmit}>
+          <label>
+            <input name = 'userCity' className = "city" type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder = 'Enter City Name'/>
+          </label>
 
-        {this.renderWeather()}
+        </form>
+        </div>
+        :<button onClick = {()=>this.setState({weather:{}})}> Search New Zip </button>
+
+      }
 
       </div>
 
