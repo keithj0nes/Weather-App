@@ -126,6 +126,7 @@ handleInputChange(event) {
 
 
 
+
     //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.loading === false && Object.keys(this.state.weather).length > 0){
       return (
@@ -183,7 +184,7 @@ handleInputChange(event) {
 
         </form>
         </div>
-        :<button onClick = {()=>this.setState({weather:{}})}> Search New Zip </button>
+        :<button onClick = {()=>this.setState({weather:{}})}> Search New City </button>
 
       }
 

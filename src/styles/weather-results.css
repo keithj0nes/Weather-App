@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Comfortaa');
+/* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> */
 
 
 .main-content h1{
@@ -7,7 +8,6 @@
   font-size: 30px;
   font-family: 'Comfortaa';
   color: black;
-
 
 
 }
@@ -20,6 +20,7 @@
 }
 
  p.temp i {
+   /* background-color: green; */
   position: absolute;
   top: 90px;
   right: 50px;
@@ -32,8 +33,8 @@
   /* background-color: yellow; */
   text-transform: capitalize;
   font-family: 'Comfortaa';
-  padding-top:  10px;
-  padding-bottom: 25px;
+  margin-top:  15px;
+  margin-bottom: 25px;
   color: black;
 }
 
@@ -86,4 +87,47 @@ h1.homeText i{
 }
 .searchzip input.city{
   margin: 20px;
+}
+
+.searchzip button{
+  position: relative;
+  background-color: transparent;
+  color: white;
+  padding: 10px;
+  font-family: 'Comfortaa';
+  border: none;
+
+
+
+}
+
+
+
+/* ful page css */
+@media only screen and (min-width: 768px) {
+  .main-content h1{
+    padding: 20px;
+    /* background-color: red; */
+    font-size: 30px;
+    font-family: 'Comfortaa';
+    color: black;
+}
+.main-content .footer{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  /* background-color: pink; */
+  color: black;
+  Opacity : 0.8;
+  padding-top: 20px;
+}
+p.temp i {
+  /* background-color: green; */
+  position: absolute;
+  top: 75px;
+  right: 500px;
+  font-size: 90px;
+  color: black;
+}
+
 }
