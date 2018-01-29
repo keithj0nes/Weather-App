@@ -45,7 +45,7 @@
 	align-items: center;
   /* background-color: pink; */
   color: black;
-  Opacity : 0.8;
+  Opacity : 0.5;
   padding-top: 20px;
 
 }
@@ -96,8 +96,22 @@ h1.homeText i{
   padding: 10px;
   font-family: 'Comfortaa';
   border: none;
+  opacity: 0.5;
+}
 
+ul.dot{
+  display: flex;
+  justify-content: center;
+	align-items: center;
+}
 
+li.dot{
+  height: 10px;
+  width: 10px;
+  border: 2px solid black;
+  border-radius: 50%;
+  list-style-type: none;
+  margin: 0px 5px;
 
 }
 
@@ -122,10 +136,8 @@ h1.homeText i{
   padding-top: 20px;
 }
 p.temp i {
-  /* background-color: green; */
-  position: absolute;
   top: 75px;
-  right: 500px;
+  right: 530px;
   font-size: 90px;
   color: black;
 }

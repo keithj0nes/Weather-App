@@ -14,8 +14,11 @@ class WeatherResults extends React.Component {
       error: false,
       loading: false,
       userZip: '',
-      userCity: ''
+      userCity: '',
+      allCities:[],
+      index: 0
     }
+
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -25,6 +28,7 @@ class WeatherResults extends React.Component {
     console.log('getin her')
     const that = this
 
+    var allCities = [...this.state.allCities];
 
     event.preventDefault()
     //setState loading to true when form is submitted - change to false after data gets back
@@ -36,9 +40,11 @@ class WeatherResults extends React.Component {
       setTimeout(function() {
         axios.get('http://api.openweathermap.org/data/2.5/weather?zip=' + that.state.userZip + ',us&APPID=' + config.apiKey + '&units=imperial')
           .then(function(response) {
+            allCities.push(response.data)
             that.setState({
               weather: response.data,
-              loading: false
+              loading: false,
+              allCities: allCities
             });
             // const d = response.data
             console.log(response.data, 'here is the response');
@@ -58,9 +64,12 @@ class WeatherResults extends React.Component {
         axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + that.state.userCity + '&APPID=' + config.apiKey + '&units=imperial')
 
           .then(function(response) {
+            allCities.push(response.data)
             that.setState({
               weather: response.data,
-              loading: false
+              loading: false,
+              allCities: allCities,
+              index: allCities.length-1
             });
             // const d = response.data
             console.log(response.data, 'here is the response');
@@ -72,7 +81,11 @@ class WeatherResults extends React.Component {
             console.log(error, 'here is the error');
           });
       }, 1000);
+
     }
+    // this.setState({allCities})
+    console.log(allCities, 'all cities');
+
   }
 
 handleInputChange(event) {
@@ -90,7 +103,11 @@ handleInputChange(event) {
     //if our app is loading, show the loading icon
     var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
     var weatherIcon = null;
-    var des = Object.keys(this.state.weather).length > 0 ? this.state.weather.weather[0].description: null;
+    var des = Object.keys(this.state.allCities).length > 0 ? this.state.allCities[this.state.index].weather[0].description: null;
+
+    var dotStyle = {
+      backgroundColor: 'black',
+    }
 
     if(des ==='haze' ){
       weatherIcon = "wi wi-day-haze"
@@ -129,22 +146,53 @@ handleInputChange(event) {
 
     //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.loading === false && Object.keys(this.state.weather).length > 0){
+      console.log(this.state.index, 'swaggyP');
+
+      var cityArrayLen = this.state.allCities.length -1;
+      var selectedCity = this.state.allCities[this.state.index];
+      console.log(selectedCity, "selectedCity")
+      console.log(this.state.allCities.length, 'length array aa');
+
+
       return (
         <div className='main-content'>
 
-          <h1>Today in {this.state.weather.name} </h1>
-          <p className = 'temp'>{this.state.weather.main.temp.toFixed(0)} <i className="wi wi-fahrenheit" alt="logo"></i></p>
+          <h1>Today in {selectedCity.name} </h1>
+          <p className = 'temp'>{selectedCity.main.temp.toFixed(0)} <i className="wi wi-fahrenheit" alt="logo"></i></p>
           <p className ='icon'>
           <i className= {weatherIcon} alt="logo" style={{fontSize: '80px', display:'inline-flex', justifyContent: 'center', alignItems: 'center', padding: '10px'  }}> </i> </p>
-          <p className = 'description'>{this.state.weather.weather[0].description}</p>
+          <p className = 'description'>{selectedCity.weather[0].description}</p>
+
+          <ul className = "dot">
+          {this.state.allCities.map((city,index) => {
+            if(this.state.index === index) {
+              return <li className="dot" style={dotStyle} key={index}></li>
+            } else {
+              return <li className="dot" key={index}></li>
+            }
+          })}
+
+          </ul>
           <div className ='footer'>
-            <p className = 'sunrise'>{moment.unix(this.state.weather.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
-            <p className = 'wind'>{this.state.weather.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
-            <p className = 'sunset'>{ moment.unix(this.state.weather.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
+            <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
+            <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
+            <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
           </div>
+
+          {this.state.allCities.length === 1 || this.state.index === 0 ? '': <button onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> previous </button>}
+          {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <button onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> Next </button>}
+
+
+
         </div>
+
       )
       //when loading is true, show the loadingIcon until data comes back
+
+
+      this.state.allCities.map(city => {
+        return <li className="dot"></li>
+      })
 
     } else if(this.state.loading === true) {
       return (
