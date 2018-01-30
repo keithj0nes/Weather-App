@@ -155,30 +155,40 @@ handleInputChange(event) {
       return (
         <div className="weather-container">
           <div className="date-time">
-            <p>{moment.unix(selectedCity.dt).format('h:mm a')}</p>
-            <button onClick = {()=>this.setState({weather:{}})}> + </button>
+            <p className="white">{moment.unix(selectedCity.dt).format('h:mm')}</p>
+            <button onClick = {()=>this.setState({weather:{}})}> ++++ </button>
             <p>{moment.unix(selectedCity.dt).format('MMM D')}</p>
           </div>
 
           <div className="icon-prev-next">
 
-                    {this.state.allCities.length === 1 || this.state.index === 0 ? '': <button onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> L </button>}
 
-                    <div>
-                      <i className={weatherIcon} alt="logo"> </i>
+                    <div className="icon-dot-container">
+                      <i className={`white ${weatherIcon}`} alt="logo"> </i>
 
-                      <ul className = "dot">
-                        {this.state.allCities.map((city,index) => {
-                          if(this.state.index === index) {
-                            return <li className="dot" style={selectedDotStyle} key={index}></li>
-                          } else {
-                            return <li className="dot" key={index}></li>
-                          }
-                        })}
-                      </ul>
+
+                      {this.state.allCities.length > 1 ?
+                        <ul className = "dot" style={{marginTop: '20px'}}>
+                          {this.state.allCities.map((city,index) => {
+                            if(this.state.index === index) {
+                              return <li className="dot" style={selectedDotStyle} key={index}></li>
+                            } else {
+                              return <li className="dot" key={index}></li>
+                            }
+                          })}
+                        </ul>:
+                        ''
+                      }
+
+                    </div>
+                    <div className="prev-button">
+                      {this.state.allCities.length === 1 || this.state.index === 0 ? '': <button onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> <i className="arrow-left"> </i> </button>}
                     </div>
 
-                    {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <button onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> R </button>}
+                    <div className="next-button">
+                      {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <button onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> <i className="arrow-right"> </i></button>}
+                    </div>
+
 
           </div>
 
@@ -188,11 +198,11 @@ handleInputChange(event) {
           </div>
           <div className="city">
             <div className="top-border"></div>
-            <h1>{selectedCity.name} </h1>
+            <h1 className="white">{selectedCity.name} </h1>
           </div>
 
 
-          <div className ='footer'>
+          <div className ='footer' hidden>
             <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
             <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
             <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
@@ -243,7 +253,7 @@ handleInputChange(event) {
 
         </form>
         </div>
-        :<button onClick = {()=>this.setState({weather:{}})}> Search New City </button>
+        :<button hidden onClick = {()=>this.setState({weather:{}})}> Search New City </button>
 
       }
 
