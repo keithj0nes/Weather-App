@@ -1,10 +1,74 @@
-@import url('https://fonts.googleapis.com/css?family=Comfortaa');
+/*@import url('https://fonts.googleapis.com/css?family=Comfortaa');*/
 /* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> */
 
 
+
+.weather-container {
+  width: 100vw;
+  background: pink;
+  /*height: 100vh;*/
+}
+
+.weather-container .date-time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: red;
+}
+
+.weather-container .icon-prev-next {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: blue;
+}
+
+.weather-container .icon-prev-next i {
+  font-size: 80px;
+}
+
+.weather-container .temp-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: green;
+}
+
+.weather-container .city {
+  display: flex;
+  flex-direction: column;
+  background-color: purple;
+}
+
+.weather-container .city .top-border {
+  height: 4px;
+  width: 100%;
+  background-color: white;
+  border-radius: 3px;
+}
+
+
+ul.dot {
+  display: flex;
+  justify-content: center;
+	align-items: center;
+  background: blue;
+}
+
+
+li.dot{
+  height: 10px;
+  width: 10px;
+  border: 2px solid black;
+  border-radius: 50%;
+  list-style-type: none;
+  margin: 0px 5px;
+
+}
+
+/*
 .main-content h1{
   padding: 20px;
-  /* background-color: red; */
   font-size: 30px;
   font-family: 'Comfortaa';
   color: black;
@@ -14,13 +78,11 @@
 
 .main-content p.temp{
   font-size: 130px;
-  /* background-color: green; */
   font-family: 'Comfortaa';
   color: black;
 }
 
  p.temp i {
-   /* background-color: green; */
   position: absolute;
   top: 90px;
   right: 50px;
@@ -30,7 +92,6 @@
 
 .main-content p.description{
   font-size: 30px;
-  /* background-color: yellow; */
   text-transform: capitalize;
   font-family: 'Comfortaa';
   margin-top:  15px;
@@ -43,7 +104,6 @@
 
 	justify-content: space-between;
 	align-items: center;
-  /* background-color: pink; */
   color: black;
   Opacity : 0.5;
   padding-top: 20px;
@@ -57,7 +117,6 @@
 .main-content .footer i {
   font-size: 50px;
   padding: 10px;
-  /* background-color: purple; */
   align-items: center;
   color: black;
 
@@ -79,7 +138,6 @@ h1.homeText i{
 .searchzip input{
   border-radius: 20px;
   border: none;
-  /* height: 20px; */
   text-align: center;
   font-family: 'Comfortaa';
   padding: 10px;
@@ -117,11 +175,9 @@ li.dot{
 
 
 
-/* ful page css */
 @media only screen and (min-width: 768px) {
   .main-content h1{
     padding: 20px;
-    /* background-color: red; */
     font-size: 30px;
     font-family: 'Comfortaa';
     color: black;
@@ -130,7 +186,6 @@ li.dot{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  /* background-color: pink; */
   color: black;
   Opacity : 0.8;
   padding-top: 20px;
@@ -142,4 +197,4 @@ p.temp i {
   color: black;
 }
 
-}
+}*/
