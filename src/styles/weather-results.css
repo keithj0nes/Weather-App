@@ -25,23 +25,63 @@ h1 {
   flex-direction: column;
 }
 
-.weather-container > div {
-  flex: 1;
-}
-
 .weather-container .date-time {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /*background: red;*/
+}
+
+.weather-container .date-time p:last-of-type {
+  text-align: right;
+}
+
+.weather-container .date-time p {
+  flex: 1;
+}
+
+.weather-container .date-time .add-button {
+  color: white;
+  padding: 0px 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+}
+
+.weather-container .date-time .add-button .add-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-container .date-time .add-button .add-icon::before,
+.weather-container .date-time .add-button .add-icon::after {
+  content: '';
+  position: absolute;
+  height: 3px;
+  width: 30px;
+  margin-top: -1px;
+  background: #000;
+  border-radius: 5px;
+}
+
+.weather-container .date-time .add-button .add-icon::after {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 
 .weather-container .icon-prev-next {
   display: flex;
   justify-content: center;
   align-items: center;
-  /*background: blue;*/
   position: relative;
+  flex: 1;
 }
 
 .weather-container .icon-prev-next button {
