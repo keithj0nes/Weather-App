@@ -179,12 +179,12 @@ handleInputChange(event) {
               }
             </div>
 
-            <div className="prev-button">
-              {this.state.allCities.length === 1 || this.state.index === 0 ? '': <button onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> <i className="arrow-left"> </i> </button>}
+            <div className="arrow-button prev">
+              {this.state.allCities.length === 1 || this.state.index === 0 ? '': <div className="arrow-icon icon-left" onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> <div className="arrow arrow-left"></div> </div>}
             </div>
 
-            <div className="next-button">
-              {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <button onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> <i className="arrow-right"> </i></button>}
+            <div className="arrow-button next">
+              {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <div className="arrow-icon icon-right" onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> <div className="arrow arrow-right"> </div></div>}
             </div>
           </div>
 

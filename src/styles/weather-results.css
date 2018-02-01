@@ -89,43 +89,92 @@ h1 {
   width: 100%;
 }
 
-.weather-container .icon-prev-next .prev-button {
+.weather-container .icon-prev-next div {
+  height: 100%;
+  width: 100%;
+}
+
+.weather-container .icon-prev-next .arrow-button {
   position: absolute;
   height: 100%;
   width: 50%;
+}
+
+.weather-container .icon-prev-next .prev {
   left: 0;
-  /*background: teal;*/
-  /*opacity: 0.5;*/
 }
 
-/*.weather-container .icon-prev-next .prev-button i.arrow-left {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-left: 7px solid black;
-  border-top: 7px solid black;
-  transform: rotate(-45deg);
-}*/
-
-.weather-container .icon-prev-next .next-button {
-  position: absolute;
-  height: 100%;
-  width: 50%;
+.weather-container .icon-prev-next .next {
   right: 0;
-  /*background: brown;*/
-  /*opacity: 0.5;*/
 }
 
-/*.weather-container .icon-prev-next .next-button i.arrow-right {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-right: 7px solid black;
-  border-top: 7px solid black;
-  transform: rotate(45deg);
-}*/
+.weather-container .icon-prev-next .arrow-button .arrow-icon {
+  display: flex;
+  align-items: center;
+}
 
+.weather-container .icon-prev-next .arrow-button .icon-left {
+  justify-content: flex-start;
+}
 
+.weather-container .icon-prev-next .arrow-button .icon-right {
+  justify-content: flex-end;
+}
+
+.weather-container .icon-prev-next .arrow-button .arrow-icon .arrow {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.weather-container .icon-prev-next .arrow-button .arrow-icon .arrow-left {
+  justify-content: flex-start;
+}
+.weather-container .icon-prev-next .arrow-button .arrow-icon .arrow-right {
+  justify-content: flex-end;
+
+}
+
+  /***  ARROW  ***/
+
+    .arrow::before,
+    .arrow::after {
+      content: '';
+      position: absolute;
+      height: 4px;
+      width: 40px;
+      background: #000;
+      border-radius: 5px;
+    }
+
+    .arrow::before {
+      margin-top: 16px;
+    }
+
+    .arrow::after {
+      margin-top: -16px;
+    }
+
+    .arrow-left::before {
+      transform: rotate(60deg);
+      margin-left: -6px;
+    }
+
+    .arrow-left::after {
+      transform: rotate(-60deg);
+      margin-left: -6px;
+    }
+
+    .arrow-right::before {
+      transform: rotate(-60deg);
+      margin-left: 6px;
+    }
+
+    .arrow-right::after {
+      transform: rotate(60deg);
+      margin-left: 6px;
+    }
 
 .weather-container .icon-prev-next .icon-dot-container {
   display: flex;
@@ -144,7 +193,6 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /*background: green;*/
 }
 
 .weather-container .temp-status .temp {
@@ -154,7 +202,6 @@ h1 {
 .weather-container .city {
   display: flex;
   flex-direction: column;
-  /*background-color: purple;*/
 }
 
 .weather-container .city .top-border {
