@@ -1,8 +1,9 @@
 import React from 'react';
-import axios from 'axios';
-import '../weather-icons-master/css/weather-icons.css';
+import SearchWeather from './SearchWeather';
 import config from '../config.js';
+import axios from 'axios';
 import moment from 'moment'
+import '../weather-icons-master/css/weather-icons.css';
 import '../styles/weather-results.css'
 
 
@@ -94,6 +95,11 @@ handleInputChange(event) {
   });
   console.log(event.target.name, event.target.value);
 
+}
+
+
+getWeatherData(response, err){
+  console.log(response, 'getting resonse here');
 }
 
 
@@ -239,22 +245,7 @@ handleInputChange(event) {
     return (
       <div className = 'searchzip'>
       {this.renderWeather()}
-        {Object.keys(this.state.weather).length === 0?
-          <div className = 'forms'>
-        <form name = 'userZip' onSubmit={this.handleFormSubmit}>
-          <label>
-            <input name = 'userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder = 'Enter Zip Code'/>
-            <br/>
-          </label>
-
-        </form>
-        <form name = "userCity" onSubmit={this.handleFormSubmit}>
-          <label>
-            <input name = 'userCity' className = "city" type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder = 'Enter City Name'/>
-          </label>
-
-        </form>
-        </div>
+        {Object.keys(this.state.weather).length === 0? <SearchWeather />
         :<button hidden onClick = {()=>this.setState({weather:{}})}> Search New City </button>
 
       }
