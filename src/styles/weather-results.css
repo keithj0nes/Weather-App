@@ -25,7 +25,7 @@ p {
 
 .main {
   background: #4571DA;
-  padding: 20px;
+  /*padding: 20px;*/
   width: 100vw;
   min-height: 100vh;
 }
@@ -73,10 +73,11 @@ p {
 
 
 .weather-container {
-  min-height: calc(100vh - 20px);
+  min-height: 100vh;
   text-transform: uppercase;
   display: flex;
   flex-direction: column;
+  padding: 20px 20px 0 20px;
 }
 
 
@@ -113,6 +114,7 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 27px;
 }
 
 .weather-container .date-time .add-button .add-icon::before,
@@ -300,8 +302,8 @@ li.dot{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100vw;
-  margin-left: -20px;
+  width: 100%;
+  /*margin-left: -20px;*/
   padding: 20px;
 }
 
@@ -323,7 +325,7 @@ li.dot{
 
 
 .footer {
-  padding-top: 25px;
+  padding: 25px 20px 20px 20px;
 }
 
 .footer .top,
@@ -348,6 +350,9 @@ li.dot{
 
 /***  SEARCH  ***/
 
+.home {
+  padding: 20px;
+}
 .home h1 {
   text-align: center;
   margin-bottom: 20px;
@@ -374,9 +379,10 @@ form input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100vw;
-  margin-left: -20px;
   padding: 20px;
+  cursor: pointer;
+  /*width: calc(100% + 20px)*/
+  width: 100%;
 }
 
 .my-cities ul li:nth-child(odd){
@@ -384,5 +390,41 @@ form input {
 }
 
 .my-cities ul li p {
-  background: green;
+  color: #fff;
+}
+
+.my-cities ul li:hover {
+  cursor: pointer;
+}
+
+.my-cities ul li div {
+  display: flex;
+  justify-content: space-between;
+  width: 30%;
+}
+
+.my-cities #delete {
+  padding: 0px 5px;
+  color: #000;
+}
+
+@media only screen and (min-width: 500px) {
+  .main > div {
+    margin: 0 auto;
+    width: 500px;
+  }
+
+  h1 {
+    font-size: 65px;
+  }
+
+  h2 {
+    font-size: 50px;
+    /*margin: 20px 0;*/
+  }
+
+  p {
+    font-size: 45px;
+  }
+
 }

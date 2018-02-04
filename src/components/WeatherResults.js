@@ -72,8 +72,6 @@ class WeatherResults extends React.Component {
               });
               // const d = response.data
               console.log(response.data, 'here is the response');
-              // that.userZipForm.reset();
-              console.log(document.getElementById('userZip'), 'hahahaha');
               that.setState({userZip: '', userCity: ''})
 
 
@@ -208,12 +206,10 @@ getWeatherData(response, err){
 
     //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.search === false){
-      console.log(this.state.index, 'swaggyP');
       // var selectedCity = this.state.allCities[this.state.index];
-      var selectedCity = this.state.selectedCity || this.state.allCities[this.state.index];
+      var selectedCity = this.state.selectedCity;
 
       console.log(selectedCity, "selectedCity")
-      console.log(this.state.allCities.length, 'length array aa');
 
 
       return (
@@ -232,10 +228,6 @@ getWeatherData(response, err){
                 {this.state.allCities.length > 1 ?
                   <ul className = "dot" style={{marginTop: '20px'}}>
                     {this.state.allCities.map((city,index) => {
-                      console.log(this.state.allCities[index]);
-                      console.log(this.state.index);
-                      console.log(index);
-
                       if(this.state.index === index) {
                         return <li className="dot" style={selectedDotStyle} key={index}></li>
                       } else {
@@ -283,7 +275,7 @@ getWeatherData(response, err){
 
           <div className ='footer'>
             <div className="top">
-              <p className='wind'> <i className="wi wi-cloudy-gusts" alt="logo"></i> {selectedCity.wind.speed.toFixed(0) + ' mph'} </p>
+              <p className='wind'> <i className="wi wi-cloudy-gusts" alt="logo"></i> {Math.round(selectedCity.wind.speed) + ' mph'} </p>
 
               <p className='sunrise align-right'> <i className="wi wi-sunrise" alt="logo"></i> {moment.unix(selectedCity.sys.sunrise).format('h:mm a')} </p>
             </div>
@@ -315,6 +307,7 @@ getWeatherData(response, err){
       )
     }
     return (
+      <div>
       <div className='home'>
         <h1>Open Weather</h1>
         <div className="thick-border"></div>
@@ -326,39 +319,52 @@ getWeatherData(response, err){
             <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
           </form>
         </div>
+      </div> { /* End home */ }
+      <h2 className="center">My Cities</h2>
 
-        <h2 className="center">My Cities</h2>
+      <div className="my-cities">
+        {this.state.allCities.length <= 0 ?
+          <p className="center">Search for a city to add to your cities!</p> :
 
-        <div className="my-cities">
-          {this.state.allCities.length <= 0 ?
-            <p className="center">Search for a city to add to your cities!</p> :
+          <ul>
+            {this.state.allCities.map((city, key) => {
+              return (
+                <li key={key}onClick={(e)=>{
+                    if(!e.target.id){
+                      this.setState({
+                                  selectedCity: city,
+                                  search: false,
+                                  index: key})}}}>
+                  <p>
+                    {city.name}
+                  </p>
 
-            <ul>
-              {this.state.allCities.map((city, key) => {
-                return (
-                  <li key={key}>
-                    <p onClick={()=>{this.setState({
-                                      selectedCity: city,
-                                      search: false,
-                                      index: key})
-                                    }}>{city.name}</p>
+                  <div>
                     <p>{Math.round(city.main.temp)}&#176;</p>
-                  </li>
-                )
-              })}
-            </ul>
-          }
+
+                    <p id="delete" onClick={()=>{
+                      let newState = [...this.state.allCities];
+                      newState.splice(key, 1)
+                      this.setState({allCities: newState})
+                    }}>
+                    x
+                    </p>
+                  </div>
 
 
-        </div>
+                </li>
+              )
+            })}
+          </ul>
+        }
 
-      { /* End home */ } </div>
+
+      </div>
+      </div>
     )
   }
 
-
   render() {
-    // console.log(Object.keys(this.state.weather).length, 'weather');
     return (
       <div className="main">
         {
@@ -367,14 +373,8 @@ getWeatherData(response, err){
           : this.renderWeather()
         }
       </div>
-
     )
   }
-
-
 }
-
-
-// <p className = 'date'>{moment.unix(this.state.weather.dt).format('MMMM Do YYYY, h:mm a')}</p>
 
 export default WeatherResults;
