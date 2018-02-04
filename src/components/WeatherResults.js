@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchWeather from './SearchWeather';
+// import SearchWeather from './SearchWeather';
 import config from '../config.js';
 import axios from 'axios';
 import moment from 'moment'
@@ -11,6 +11,7 @@ class WeatherResults extends React.Component {
   constructor(){
     super();
     this.state = {
+      baseUrl: 'http://api.openweathermap.org/data/2.5/',
       weather: {},
       error: false,
       loading: false,
@@ -39,22 +40,46 @@ class WeatherResults extends React.Component {
     if (event.target.name === 'userZip'){
       // setTimeout for 2 second to show loading icon - not neccessary but looks cool
       setTimeout(function() {
-        axios.get('http://api.openweathermap.org/data/2.5/weather?zip=' + that.state.userZip + ',us&APPID=' + config.apiKey + '&units=imperial')
+        axios.get(`${that.state.baseUrl}weather?zip=${that.state.userZip},us&APPID=${config.apiKey}&units=imperial`)
           .then(function(response) {
-            allCities.push(response.data)
-            that.setState({
-              weather: response.data,
-              loading: false,
-              allCities: allCities
+            axios.get(`${that.state.baseUrl}forecast?zip=${that.state.userZip},us&APPID=${config.apiKey}&units=imperial`)
+            .then((forcastResponse) => {
+
+              console.log(forcastResponse, 'forcastResponse');
+
+              var forecast = []
+              forcastResponse.data.list.map((item) =>{
+                const hour = moment.unix(item.dt).hour()
+                if(hour >= 12 && hour <= 15){
+                  console.log(hour, 'hour');
+                  forecast.push(item)
+                }
+              })
+              response.data.forecast = forecast;
+              allCities.push(response.data)
+              that.setState({
+                weather: response.data,
+                loading: false,
+                allCities: allCities
+              });
+              // const d = response.data
+              console.log(response.data, 'here is the response');
+
+
+            })
+            .catch(function(error) {
+              that.setState({
+                error: true
+              })
+              console.log(error, 'here is the error in forcast zip');
             });
-            // const d = response.data
-            console.log(response.data, 'here is the response');
+
           })
           .catch(function(error) {
             that.setState({
               error: true
             })
-            console.log(error, 'here is the error');
+            console.log(error, 'here is the error weather zip');
           });
       }, 1000);
     }
@@ -62,8 +87,7 @@ class WeatherResults extends React.Component {
     else if(event.target.name === 'userCity') {
       setTimeout(function() {
 
-        axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + that.state.userCity + '&APPID=' + config.apiKey + '&units=imperial')
-
+        axios.get(`${that.state.baseUrl}weather?q=${that.state.userCity}&APPID=${config.apiKey}&units=imperial`)
           .then(function(response) {
             allCities.push(response.data)
             that.setState({
@@ -72,8 +96,6 @@ class WeatherResults extends React.Component {
               allCities: allCities,
               index: allCities.length-1
             });
-            // const d = response.data
-            console.log(response.data, 'here is the response');
           })
           .catch(function(error) {
             that.setState({
@@ -107,6 +129,7 @@ getWeatherData(response, err){
 
   renderWeather(){
     //if our app is loading, show the loading icon
+    console.log(this.state.allCities, 'ALL CITIES IN renderWeather');
     var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
     var weatherIcon = null;
     var des = Object.keys(this.state.allCities).length > 0 ? this.state.allCities[this.state.index].weather[0].description: null;
@@ -162,7 +185,7 @@ getWeatherData(response, err){
         <div>
         <div className="weather-container">
           <div className="date-time">
-            <p className="white">{moment.unix(selectedCity.dt).format('h:mm')}</p>
+            <p className="white">{moment.unix(selectedCity.dt).format('h:mm a')}</p>
             <p className="add-button" onClick = {()=>this.setState({weather:{}})}><i className='add-icon'></i> </p>
             <p>{moment.unix(selectedCity.dt).format('MMM D')}</p>
           </div>
@@ -204,20 +227,22 @@ getWeatherData(response, err){
           </div>
 
 
+
+
           <div className ='footer' hidden>
             <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
             <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
             <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
           </div>
 
-
+    
 
         </div>
-        <div className ='footer'>
-          <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
-          <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
-          <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
-        </div>
+          <div className ='footer'>
+            <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
+            <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
+            <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
+          </div>
         </div>
 
       )
@@ -241,12 +266,32 @@ getWeatherData(response, err){
 
 
   render() {
-    console.log(Object.keys(this.state.weather).length, 'weather');
+    // console.log(Object.keys(this.state.weather).length, 'weather');
     return (
       <div className = 'searchzip'>
-      {this.renderWeather()}
-        {Object.keys(this.state.weather).length === 0? <SearchWeather />
-        :<button hidden onClick = {()=>this.setState({weather:{}})}> Search New City </button>
+        {this.renderWeather()}
+        {Object.keys(this.state.weather).length === 0 ?
+         <div className='search-container'>
+
+
+            <div className='forms'>
+              <form name='userZip' onSubmit={this.handleFormSubmit}>
+                <label>
+                  <input name='userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
+                  <br/>
+                </label>
+              </form>
+
+              <form name="userCity" onSubmit={this.handleFormSubmit}>
+                <label>
+                  <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
+                </label>
+              </form>
+            </div>
+
+
+          </div>
+          : null
 
       }
 
@@ -254,6 +299,8 @@ getWeatherData(response, err){
 
     )
   }
+
+
 }
 
 

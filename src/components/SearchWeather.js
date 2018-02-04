@@ -10,7 +10,8 @@ class SearchWeather extends React.Component {
     this.state = {
       loading: false,
       userZip: '',
-      userCity: ''
+      userCity: '',
+      allCities: []
     }
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -26,9 +27,9 @@ class SearchWeather extends React.Component {
     var allCities = [...this.state.allCities];
 
     //setState loading to true when form is submitted - change to false after data gets back
-    this.setState({
-      loading: true
-    })
+    // this.setState({
+    //   loading: true
+    // })
     if (e.target.name === 'userZip'){
       // setTimeout for 2 second to show loading icon - not neccessary but looks cool
       setTimeout(function() {
