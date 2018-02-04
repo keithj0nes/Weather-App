@@ -55,6 +55,7 @@ class WeatherResults extends React.Component {
                   return forecast.push(item)
                 }
               })
+
               response.data.forecast = forecast;
               allCities.push(response.data)
               that.setState({
@@ -89,13 +90,40 @@ class WeatherResults extends React.Component {
 
         axios.get(`${that.state.baseUrl}weather?q=${that.state.userCity}&APPID=${config.apiKey}&units=imperial`)
           .then(function(response) {
-            allCities.push(response.data)
-            that.setState({
-              weather: response.data,
-              loading: false,
-              allCities: allCities,
-              index: allCities.length-1
+            axios.get(`${that.state.baseUrl}forecast?q=${that.state.userCity},us&APPID=${config.apiKey}&units=imperial`)
+            .then((forcastResponse) => {
+
+              console.log(forcastResponse, 'forcastResponse');
+
+              var forecast = []
+
+              forcastResponse.data.list.map((item) => {
+                const hour = moment.unix(item.dt).hour()
+                if(hour >= 12 && hour <= 15){
+                  console.log(hour, 'hour');
+                  return forecast.push(item)
+                }
+              })
+
+              response.data.forecast = forecast;
+              allCities.push(response.data)
+              that.setState({
+                weather: response.data,
+                loading: false,
+                allCities: allCities
+              });
+              // const d = response.data
+              console.log(response.data, 'here is the response');
+
+
+            })
+            .catch(function(error) {
+              that.setState({
+                error: true
+              })
+              console.log(error, 'here is the error in forcast zip');
             });
+
           })
           .catch(function(error) {
             that.setState({
