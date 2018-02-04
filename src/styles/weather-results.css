@@ -22,6 +22,7 @@ p {
   background: #4571DA;
   padding: 20px;
   width: 100vw;
+  min-height: 100vh;
 }
 
 .thick-border {
@@ -35,6 +36,28 @@ p {
   display: flex;
   justify-content: space-between;
 }
+
+
+
+
+
+
+.loading-icon {
+  animation: loading-icon-spinner infinite 1.75s linear;
+  height: 140px;
+}
+
+@keyframes loading-icon-spinner {
+  /*from { transform: rotate(0deg); }*/
+  to { transform: rotate(-360deg); }
+}
+
+
+
+
+
+
+
 
 .weather-container {
   min-height: calc(100vh - 20px);

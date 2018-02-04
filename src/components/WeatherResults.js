@@ -2,7 +2,8 @@ import React from 'react';
 // import SearchWeather from './SearchWeather';
 import config from '../config.js';
 import axios from 'axios';
-import moment from 'moment'
+import moment from 'moment';
+import loading from '../img/loading.png';
 import '../weather-icons-master/css/weather-icons.css';
 import '../styles/weather-results.css'
 
@@ -23,6 +24,7 @@ class WeatherResults extends React.Component {
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.renderLogin = this.renderLogin.bind(this);
   }
 
 
@@ -30,6 +32,7 @@ class WeatherResults extends React.Component {
     console.log('getin her')
     const that = this
 
+    console.log(this.userZipForm);
     var allCities = [...this.state.allCities];
 
     event.preventDefault()
@@ -47,8 +50,8 @@ class WeatherResults extends React.Component {
 
               console.log(forcastResponse, 'forcastResponse');
 
-              var forecast = []
-              forcastResponse.data.list.map((item) => {
+              let forecast = []
+              forcastResponse.data.list.forEach((item) => {
                 const hour = moment.unix(item.dt).hour()
                 if(hour >= 12 && hour <= 15){
                   console.log(hour, 'hour');
@@ -66,6 +69,9 @@ class WeatherResults extends React.Component {
               });
               // const d = response.data
               console.log(response.data, 'here is the response');
+              // that.userZipForm.reset();
+              console.log(document.getElementById('userZip'), 'hahahaha');
+              that.setState({userZip: '', userCity: ''})
 
 
             })
@@ -93,12 +99,8 @@ class WeatherResults extends React.Component {
           .then(function(response) {
             axios.get(`${that.state.baseUrl}forecast?q=${that.state.userCity},us&APPID=${config.apiKey}&units=imperial`)
             .then((forcastResponse) => {
-
-              console.log(forcastResponse, 'forcastResponse');
-
-              var forecast = []
-
-              forcastResponse.data.list.map((item) => {
+              let forecast = []
+              forcastResponse.data.list.forEach((item) => {
                 const hour = moment.unix(item.dt).hour()
                 if(hour >= 12 && hour <= 15){
                   console.log(hour, 'hour');
@@ -114,10 +116,8 @@ class WeatherResults extends React.Component {
                 allCities: allCities,
                 index: allCities.length-1
               });
-              // const d = response.data
               console.log(response.data, 'here is the response');
-
-
+              that.setState({userZip: '', userCity: ''})
             })
             .catch(function(error) {
               that.setState({
@@ -125,7 +125,6 @@ class WeatherResults extends React.Component {
               })
               console.log(error, 'here is the error in forcast zip');
             });
-
           })
           .catch(function(error) {
             that.setState({
@@ -134,11 +133,7 @@ class WeatherResults extends React.Component {
             console.log(error, 'here is the error');
           });
       }, 1000);
-
     }
-    // this.setState({allCities})
-    console.log(allCities, 'all cities');
-
   }
 
 handleInputChange(event) {
@@ -161,7 +156,8 @@ getWeatherData(response, err){
     //if our app is loading, show the loading icon
     console.log(this.state.allCities, 'ALL CITIES IN renderWeather');
     console.log(this.state.index, 'index');
-    var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
+    // var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
+
     var weatherIcon = null;
     var des = Object.keys(this.state.allCities).length > 0 ? this.state.allCities[this.state.index].weather[0].description: null;
 
@@ -215,7 +211,7 @@ getWeatherData(response, err){
 
 
       return (
-        <div className="main">
+        <div>
           <div className="weather-container">
             <div className="date-time">
               <p className="white">{moment.unix(selectedCity.dt).format('h:mm a')}</p>
@@ -252,7 +248,7 @@ getWeatherData(response, err){
 
 
             <div className="temp-status">
-              <p className="temp">{selectedCity.main.temp.toFixed(0)} <i className="wi wi-degrees" alt="logo"></i></p>
+              <p className="temp">{selectedCity.main.temp.toFixed(0)}&#176;</p>
               <p className="description">{selectedCity.weather[0].main}</p>
             </div>
             <div className="city">
@@ -295,13 +291,6 @@ getWeatherData(response, err){
       )
       //when loading is true, show the loadingIcon until data comes back
 
-    } else if(this.state.loading === true) {
-      return (
-        <div>
-          {loadingIcon}
-        </div>
-      )
-      //initial page load has no state - tell the user to search for their zip
     } else if(Object.keys(this.state.weather).length === 0){
       return <h1 className = 'homeText'>Weather App <i className="wi wi-lightning" alt="logo"></i> </h1>
 
@@ -311,37 +300,44 @@ getWeatherData(response, err){
     //we will also need to run an if this.state.error === true and display some code saying there was an error and to try again or something
   }
 
+  renderLogin(){
+    console.log('rendering login');
+    if(this.state.loading){
+      return (
+        <div>
+          <img className="loading-icon" src={loading} alt="loading-icon"/>
+        </div>
+      )
+    }
+    return (
+      <div className='search-container'>
+       <div className='forms'>
+         <form name='userZip' onSubmit={this.handleFormSubmit}>
+           <label>
+             <input name='userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
+             <br/>
+           </label>
+         </form>
+         <form name="userCity" onSubmit={this.handleFormSubmit}>
+           <label>
+             <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
+           </label>
+         </form>
+       </div>
+     </div>
+   )
+  }
+
 
   render() {
     // console.log(Object.keys(this.state.weather).length, 'weather');
     return (
-      <div className = 'searchzip'>
-        {this.renderWeather()}
-        {Object.keys(this.state.weather).length === 0 ?
-         <div className='search-container'>
-
-
-            <div className='forms'>
-              <form name='userZip' onSubmit={this.handleFormSubmit}>
-                <label>
-                  <input name='userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
-                  <br/>
-                </label>
-              </form>
-
-              <form name="userCity" onSubmit={this.handleFormSubmit}>
-                <label>
-                  <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
-                </label>
-              </form>
-            </div>
-
-
-          </div>
-          : null
-
-      }
-
+      <div className="main">
+        {
+          Object.keys(this.state.weather).length === 0
+          ? this.renderLogin()
+          : this.renderWeather()
+        }
       </div>
 
     )
