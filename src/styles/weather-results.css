@@ -10,8 +10,12 @@ h1 {
   font-size: 55px;
 }
 
+h2 {
+  font-size: 42px;
+}
+
 p {
-  font-size: 40px;
+  font-size: 36px;
 }
 
 .white {
@@ -40,15 +44,19 @@ p {
 
 
 
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-
-.loading-icon {
+.loading-container .loading-icon {
   animation: loading-icon-spinner infinite 1.75s linear;
   height: 140px;
 }
 
 @keyframes loading-icon-spinner {
-  /*from { transform: rotate(0deg); }*/
+  from { transform: rotate(0deg); }
   to { transform: rotate(-360deg); }
 }
 
@@ -330,4 +338,29 @@ li.dot{
 
 .footer p i {
   padding-right: 10px;
+}
+
+
+
+/***  SEARCH  ***/
+
+.home h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.search-container {
+}
+
+.forms {
+  /*margin-top: 20px;*/
+  /*background: red;*/
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 20px;
+  margin-top: 20px;
 }

@@ -25,6 +25,7 @@ class WeatherResults extends React.Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.renderLogin = this.renderLogin.bind(this);
+    this.renderWeather = this.renderWeather.bind(this);
   }
 
 
@@ -289,11 +290,6 @@ getWeatherData(response, err){
         { /* End main */ } </div>
 
       )
-      //when loading is true, show the loadingIcon until data comes back
-
-    } else if(Object.keys(this.state.weather).length === 0){
-      return <h1 className = 'homeText'>Weather App <i className="wi wi-lightning" alt="logo"></i> </h1>
-
 
     }
 
@@ -301,31 +297,32 @@ getWeatherData(response, err){
   }
 
   renderLogin(){
-    console.log('rendering login');
+    //when loading is true, show the loadingIcon until data comes back
     if(this.state.loading){
       return (
-        <div>
+        <div className='loading-container'>
           <img className="loading-icon" src={loading} alt="loading-icon"/>
         </div>
       )
     }
     return (
-      <div className='search-container'>
-       <div className='forms'>
-         <form name='userZip' onSubmit={this.handleFormSubmit}>
-           <label>
-             <input name='userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
-             <br/>
-           </label>
-         </form>
-         <form name="userCity" onSubmit={this.handleFormSubmit}>
-           <label>
-             <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
-           </label>
-         </form>
-       </div>
-     </div>
-   )
+      <div className='home'>
+        <h1>Open Weather</h1>
+        <div className="thick-border"></div>
+        <div className='forms'>
+          <form name='userZip' onSubmit={this.handleFormSubmit}>
+            <input name='userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
+          </form>
+          <form name="userCity" onSubmit={this.handleFormSubmit}>
+            <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
+          </form>
+        </div>
+
+        <h2>My Cities</h2>
+
+        {this.state.allCities.length <= 0 ? <p>Search for a city to add to your cities!</p> : <p>youve got cites</p> }
+      { /* End home */ } </div>
+    )
   }
 
 
