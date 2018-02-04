@@ -7,6 +7,8 @@ import loading from '../img/loading.png';
 import '../weather-icons-master/css/weather-icons.css';
 import '../styles/weather-results.css'
 
+import { iconPicker } from '../helpers';
+
 
 class WeatherResults extends React.Component {
   constructor(){
@@ -50,17 +52,16 @@ class WeatherResults extends React.Component {
             axios.get(`${that.state.baseUrl}forecast?zip=${that.state.userZip},us&APPID=${config.apiKey}&units=imperial`)
             .then((forcastResponse) => {
 
-              console.log(forcastResponse, 'forcastResponse');
+              // console.log(forcastResponse, 'forcastResponse');
 
               let forecast = []
               forcastResponse.data.list.forEach((item) => {
-                const hour = moment.unix(item.dt).hour()
+                const hour = moment.unix(item.dt).hour();
                 if(hour >= 12 && hour <= 15){
-                  console.log(hour, 'hour');
-                  return forecast.push(item)
+                  // console.log(hour, 'hour');
+                  return forecast.push(item);
                 }
               })
-
               response.data.forecast = forecast;
               allCities.push(response.data)
               that.setState({
@@ -70,7 +71,6 @@ class WeatherResults extends React.Component {
                 selectedCity: response.data,
                 index: allCities.length-1
               });
-              // const d = response.data
               console.log(response.data, 'here is the response');
               that.setState({userZip: '', userCity: ''})
 
@@ -100,12 +100,12 @@ class WeatherResults extends React.Component {
           .then(function(response) {
             axios.get(`${that.state.baseUrl}forecast?q=${that.state.userCity},us&APPID=${config.apiKey}&units=imperial`)
             .then((forcastResponse) => {
-              let forecast = []
+              let forecast = [];
               forcastResponse.data.list.forEach((item) => {
                 const hour = moment.unix(item.dt).hour()
                 if(hour >= 12 && hour <= 15){
-                  console.log(hour, 'hour');
-                  return forecast.push(item)
+                  // console.log(hour, 'hour');
+                  return forecast.push(item);
                 }
               })
 
@@ -125,93 +125,47 @@ class WeatherResults extends React.Component {
               that.setState({
                 error: true
               })
-              console.log(error, 'here is the error in forcast zip');
+              console.log(error, 'here is the error in forcast name');
             });
           })
           .catch(function(error) {
             that.setState({
               error: true
             })
-            console.log(error, 'here is the error');
+            console.log(error, 'here is the error weather name');
           });
       }, 1000);
     }
   }
 
-handleInputChange(event) {
-  this.setState({
-    [event.target.name]: event.target.value
-  });
-  // console.log(event.target.name, event.target.value);
+  handleInputChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+    // console.log(event.target.name, event.target.value);
+  }
 
-}
-
-
-getWeatherData(response, err){
-  console.log(response, 'getting resonse here');
-}
-
-
-
+  getWeatherData(response, err){
+    console.log(response, 'getting resonse here');
+  }
 
   renderWeather(){
-    //if our app is loading, show the loading icon
-    // console.log(this.state.allCities, 'ALL CITIES IN renderWeather');
-    // console.log(this.state.index, 'index');
-    // var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
+    let dayOrNight = null;
+    if(moment.unix(this.state.selectedCity.dt).hour() >=6 && moment.unix(this.state.selectedCity.dt).hour() <=18){
+      dayOrNight = 'day';
+    } else {
+      dayOrNight = 'night';
+    }
 
-    var weatherIcon = null;
-    var des = Object.keys(this.state.allCities).length > 0 ? this.state.allCities[this.state.index].weather[0].description: null;
-
-    var selectedDotStyle = {
+    const des = Object.keys(this.state.allCities).length > 0 ? this.state.allCities[this.state.index].weather[0].description: null;
+    const weatherIcon = iconPicker(dayOrNight, des);
+    const selectedDotStyle = {
       backgroundColor: 'black',
     }
 
-    if(des ==='haze' ){
-      weatherIcon = "wi wi-day-haze"
-    } else if (des === 'light rain'){
-      weatherIcon = "wi wi-rain-mix"
-    } else if (des === 'few clouds'){
-    weatherIcon = "wi wi-cloud"
-    } else if (des === 'clear sky'){
-      weatherIcon = "wi wi-day-sunny"
-    } else if (des === 'overcast clouds'){
-      weatherIcon = "wi wi-cloudy"
-    } else if (des === 'light intensity drizzle'){
-      weatherIcon = "wi wi-rain-mix"
-    } else if (des === 'mist'){
-      weatherIcon = "wi wi-windy"
-    } else if (des === 'clear sky'){
-      weatherIcon = "wi wi-day-sunny"
-    } else if (des === 'fog'){
-      weatherIcon = "wi wi-fog"
-    } else if (des === 'broken clouds'){
-      weatherIcon = "wi wi-cloudy"
-    } else if (des === 'scattered clouds'){
-      weatherIcon = "wi wi-cloudy"
-    } else if (des === 'moderate rain'){
-      weatherIcon = "wi wi-rain"
-    } else if (des === 'light intensity drizzle rain'){
-      weatherIcon = "wi wi-rain-mix"
-    } else if (des === 'smoke'){
-      weatherIcon = "wi wi-smoke"
-    } else if (des === 'light snow'){
-      weatherIcon = "wi wi-snow"
-    }
-
-
-
-
-
-
-    //only show this when loading is false and we have data stored in this.state.weather
     if(this.state.search === false){
-      // var selectedCity = this.state.allCities[this.state.index];
       var selectedCity = this.state.selectedCity;
-
       console.log(selectedCity, "selectedCity")
-
-
       return (
         <div>
           <div className="weather-container">
@@ -262,11 +216,13 @@ getWeatherData(response, err){
 
           <ul className="forecast">
             {selectedCity.forecast.map((item, key) => {
+              const foreDes = item.weather[0].description
+              const forecastIcon = iconPicker(dayOrNight, foreDes)
               return (
                 <li key={key}>
                   <p>{moment.unix(item.dt).format("dddd")}</p>
                   <p>{Math.round(item.main.temp)}&#176;</p>
-                  <p><i className={`white ${weatherIcon}`} alt="logo"> </i></p>
+                  <p><i className={`white ${forecastIcon}`} alt="logo"> </i></p>
                 </li>
               )
             })}
@@ -275,26 +231,22 @@ getWeatherData(response, err){
 
           <div className ='footer'>
             <div className="top">
-              <p className='wind'> <i className="wi wi-cloudy-gusts" alt="logo"></i> {Math.round(selectedCity.wind.speed) + ' mph'} </p>
+              <p className='wind'> <i className="wi wi-cloudy-gusts white" alt="logo"></i> {Math.round(selectedCity.wind.speed) + ' mph'} </p>
 
-              <p className='sunrise align-right'> <i className="wi wi-sunrise" alt="logo"></i> {moment.unix(selectedCity.sys.sunrise).format('h:mm a')} </p>
+              <p className='sunrise align-right'> <i className="wi wi-sunrise white" alt="logo"></i> {moment.unix(selectedCity.sys.sunrise).format('h:mm a')} </p>
             </div>
 
             <div className="thick-border"></div>
 
             <div className="bottom">
-              <p className='humidity'> <i className="wi wi-humidity" alt="logo"></i> {selectedCity.main.humidity} </p>
+              <p className='humidity'> <i className="wi wi-humidity white" alt="logo"></i> {selectedCity.main.humidity} </p>
 
-              <p className='sunset align-right'> <i className="wi wi-sunset" alt="logo"></i> {moment.unix(selectedCity.sys.sunset).format('h:mm a')} </p>
+              <p className='sunset align-right'> <i className="wi wi-sunset white" alt="logo"></i> {moment.unix(selectedCity.sys.sunset).format('h:mm a')} </p>
             </div>
           </div>
         { /* End main */ } </div>
-
       )
-
     }
-
-    //we will also need to run an if this.state.error === true and display some code saying there was an error and to try again or something
   }
 
   renderSearch(){
