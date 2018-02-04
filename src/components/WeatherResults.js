@@ -48,11 +48,11 @@ class WeatherResults extends React.Component {
               console.log(forcastResponse, 'forcastResponse');
 
               var forecast = []
-              forcastResponse.data.list.map((item) =>{
+              forcastResponse.data.list.map((item) => {
                 const hour = moment.unix(item.dt).hour()
                 if(hour >= 12 && hour <= 15){
                   console.log(hour, 'hour');
-                  forecast.push(item)
+                  return forecast.push(item)
                 }
               })
               response.data.forecast = forecast;
@@ -182,68 +182,83 @@ getWeatherData(response, err){
 
 
       return (
-        <div>
-        <div className="weather-container">
-          <div className="date-time">
-            <p className="white">{moment.unix(selectedCity.dt).format('h:mm a')}</p>
-            <p className="add-button" onClick = {()=>this.setState({weather:{}})}><i className='add-icon'></i> </p>
-            <p>{moment.unix(selectedCity.dt).format('MMM D')}</p>
-          </div>
-
-          <div className="icon-prev-next">
-            <div className="icon-dot-container">
-              <i className={`white ${weatherIcon}`} alt="logo"> </i>
-
-              {this.state.allCities.length > 1 ?
-                <ul className = "dot" style={{marginTop: '20px'}}>
-                  {this.state.allCities.map((city,index) => {
-                    if(this.state.index === index) {
-                      return <li className="dot" style={selectedDotStyle} key={index}></li>
-                    } else {
-                      return <li className="dot" key={index}></li>
-                    }
-                  })}
-                </ul>:
-                ''
-              }
+        <div className="main">
+          <div className="weather-container">
+            <div className="date-time">
+              <p className="white">{moment.unix(selectedCity.dt).format('h:mm a')}</p>
+              <p className="add-button" onClick = {()=>this.setState({weather:{}})}><i className='add-icon'></i> </p>
+              <p>{moment.unix(selectedCity.dt).format('MMM D')}</p>
             </div>
 
-            <div className="arrow-button prev">
-              {this.state.allCities.length === 1 || this.state.index === 0 ? '': <div className="arrow-icon icon-left" onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> <div className="arrow arrow-left"></div> </div>}
+            <div className="icon-prev-next">
+              <div className="icon-dot-container">
+                <i className={`white ${weatherIcon}`} alt="logo"> </i>
+
+                {this.state.allCities.length > 1 ?
+                  <ul className = "dot" style={{marginTop: '20px'}}>
+                    {this.state.allCities.map((city,index) => {
+                      if(this.state.index === index) {
+                        return <li className="dot" style={selectedDotStyle} key={index}></li>
+                      } else {
+                        return <li className="dot" key={index}></li>
+                      }
+                    })}
+                  </ul>:
+                  ''
+                }
+              </div>
+
+              <div className="arrow-button prev">
+                {this.state.allCities.length === 1 || this.state.index === 0 ? '': <div className="arrow-icon icon-left" onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> <div className="arrow arrow-left"></div> </div>}
+              </div>
+
+              <div className="arrow-button next">
+                {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <div className="arrow-icon icon-right" onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> <div className="arrow arrow-right"> </div></div>}
+              </div>
+            </div>   { /* End icon-prev-next */ }
+
+
+            <div className="temp-status">
+              <p className="temp">{selectedCity.main.temp.toFixed(0)} <i className="wi wi-degrees" alt="logo"></i></p>
+              <p className="description">{selectedCity.weather[0].main}</p>
+            </div>
+            <div className="city">
+              <div className="top-border"></div>
+              <h1 className="white">{selectedCity.name} </h1>
             </div>
 
-            <div className="arrow-button next">
-              {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <div className="arrow-icon icon-right" onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> <div className="arrow arrow-right"> </div></div>}
+
+
+
+            <div className ='footer' hidden>
+              <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
+              <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
+              <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
             </div>
-          </div>
-
-          <div className="temp-status">
-            <p className="temp">{selectedCity.main.temp.toFixed(0)} <i className="wi wi-degrees" alt="logo"></i></p>
-            <p className="description">{selectedCity.weather[0].main}</p>
-          </div>
-          <div className="city">
-            <div className="top-border"></div>
-            <h1 className="white">{selectedCity.name} </h1>
-          </div>
 
 
 
+          </div> { /* End weather container */ }
 
-          <div className ='footer' hidden>
-            <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
-            <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
-            <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
-          </div>
+          <ul className="forecast">
+            {selectedCity.forecast.map((item, key) => {
+              return (
+                <li key={key}>
+                  <p>{moment.unix(item.dt).format("dddd")}</p>
+                  <p>{Math.round(item.main.temp)}&#176;</p>
+                  <p><i className={`white ${weatherIcon}`} alt="logo"> </i></p>
+                </li>
+              )
+            })}
+          </ul>
 
-    
 
-        </div>
           <div className ='footer'>
             <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
             <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
             <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
           </div>
-        </div>
+        { /* End main */ } </div>
 
       )
       //when loading is true, show the loadingIcon until data comes back
