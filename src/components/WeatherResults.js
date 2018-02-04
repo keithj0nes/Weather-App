@@ -13,18 +13,19 @@ class WeatherResults extends React.Component {
     super();
     this.state = {
       baseUrl: 'http://api.openweathermap.org/data/2.5/',
-      weather: {},
+      search: true,
       error: false,
       loading: false,
       userZip: '',
       userCity: '',
       allCities:[],
-      index: 0
+      index: 0,
+      selectedCity: {}
     }
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.renderLogin = this.renderLogin.bind(this);
+    this.renderSearch = this.renderSearch.bind(this);
     this.renderWeather = this.renderWeather.bind(this);
   }
 
@@ -63,9 +64,10 @@ class WeatherResults extends React.Component {
               response.data.forecast = forecast;
               allCities.push(response.data)
               that.setState({
-                weather: response.data,
+                search: false,
                 loading: false,
                 allCities: allCities,
+                selectedCity: response.data,
                 index: allCities.length-1
               });
               // const d = response.data
@@ -112,9 +114,10 @@ class WeatherResults extends React.Component {
               response.data.forecast = forecast;
               allCities.push(response.data)
               that.setState({
-                weather: response.data,
+                search: false,
                 loading: false,
                 allCities: allCities,
+                selectedCity: response.data,
                 index: allCities.length-1
               });
               console.log(response.data, 'here is the response');
@@ -141,7 +144,7 @@ handleInputChange(event) {
   this.setState({
     [event.target.name]: event.target.value
   });
-  console.log(event.target.name, event.target.value);
+  // console.log(event.target.name, event.target.value);
 
 }
 
@@ -155,8 +158,8 @@ getWeatherData(response, err){
 
   renderWeather(){
     //if our app is loading, show the loading icon
-    console.log(this.state.allCities, 'ALL CITIES IN renderWeather');
-    console.log(this.state.index, 'index');
+    // console.log(this.state.allCities, 'ALL CITIES IN renderWeather');
+    // console.log(this.state.index, 'index');
     // var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
 
     var weatherIcon = null;
@@ -204,9 +207,11 @@ getWeatherData(response, err){
 
 
     //only show this when loading is false and we have data stored in this.state.weather
-    if(this.state.loading === false && Object.keys(this.state.weather).length > 0){
+    if(this.state.search === false){
       console.log(this.state.index, 'swaggyP');
-      var selectedCity = this.state.allCities[this.state.index];
+      // var selectedCity = this.state.allCities[this.state.index];
+      var selectedCity = this.state.selectedCity || this.state.allCities[this.state.index];
+
       console.log(selectedCity, "selectedCity")
       console.log(this.state.allCities.length, 'length array aa');
 
@@ -216,7 +221,7 @@ getWeatherData(response, err){
           <div className="weather-container">
             <div className="date-time">
               <p className="white">{moment.unix(selectedCity.dt).format('h:mm a')}</p>
-              <p className="add-button" onClick = {()=>this.setState({weather:{}})}><i className='add-icon'></i> </p>
+              <p className="add-button" onClick = {()=>this.setState({search: true})}><i className='add-icon'></i> </p>
               <p>{moment.unix(selectedCity.dt).format('MMM D')}</p>
             </div>
 
@@ -227,6 +232,10 @@ getWeatherData(response, err){
                 {this.state.allCities.length > 1 ?
                   <ul className = "dot" style={{marginTop: '20px'}}>
                     {this.state.allCities.map((city,index) => {
+                      console.log(this.state.allCities[index]);
+                      console.log(this.state.index);
+                      console.log(index);
+
                       if(this.state.index === index) {
                         return <li className="dot" style={selectedDotStyle} key={index}></li>
                       } else {
@@ -239,11 +248,11 @@ getWeatherData(response, err){
               </div>
 
               <div className="arrow-button prev">
-                {this.state.allCities.length === 1 || this.state.index === 0 ? '': <div className="arrow-icon icon-left" onClick = {()=>{this.setState({index: this.state.index-1})}} disabled = {this.state.index === 0}> <div className="arrow arrow-left"></div> </div>}
+                {this.state.allCities.length === 1 || this.state.index === 0 ? '': <div className="arrow-icon icon-left" onClick = {()=>{this.setState({index: this.state.index-1, selectedCity: this.state.allCities[this.state.index-1]})}} disabled={this.state.index === 0}> <div className="arrow arrow-left"></div> </div>}
               </div>
 
               <div className="arrow-button next">
-                {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <div className="arrow-icon icon-right" onClick = {()=>{this.setState({index: this.state.index+1})}} disabled = {this.state.index === this.state.allCities.length-1}> <div className="arrow arrow-right"> </div></div>}
+                {this.state.allCities.length === 1 || this.state.index === this.state.allCities.length-1? '': <div className="arrow-icon icon-right" onClick = {()=>{this.setState({index: this.state.index+1, selectedCity: this.state.allCities[this.state.index+1]})}} disabled={this.state.index === this.state.allCities.length-1}> <div className="arrow arrow-right"> </div></div>}
               </div>
             </div>   { /* End icon-prev-next */ }
 
@@ -296,7 +305,7 @@ getWeatherData(response, err){
     //we will also need to run an if this.state.error === true and display some code saying there was an error and to try again or something
   }
 
-  renderLogin(){
+  renderSearch(){
     //when loading is true, show the loadingIcon until data comes back
     if(this.state.loading){
       return (
@@ -318,9 +327,31 @@ getWeatherData(response, err){
           </form>
         </div>
 
-        <h2>My Cities</h2>
+        <h2 className="center">My Cities</h2>
 
-        {this.state.allCities.length <= 0 ? <p>Search for a city to add to your cities!</p> : <p>youve got cites</p> }
+        <div className="my-cities">
+          {this.state.allCities.length <= 0 ?
+            <p className="center">Search for a city to add to your cities!</p> :
+
+            <ul>
+              {this.state.allCities.map((city, key) => {
+                return (
+                  <li key={key}>
+                    <p onClick={()=>{this.setState({
+                                      selectedCity: city,
+                                      search: false,
+                                      index: key})
+                                    }}>{city.name}</p>
+                    <p>{Math.round(city.main.temp)}&#176;</p>
+                  </li>
+                )
+              })}
+            </ul>
+          }
+
+
+        </div>
+
       { /* End home */ } </div>
     )
   }
@@ -331,8 +362,8 @@ getWeatherData(response, err){
     return (
       <div className="main">
         {
-          Object.keys(this.state.weather).length === 0
-          ? this.renderLogin()
+          this.state.search
+          ? this.renderSearch()
           : this.renderWeather()
         }
       </div>

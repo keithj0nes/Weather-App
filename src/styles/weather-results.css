@@ -12,6 +12,7 @@ h1 {
 
 h2 {
   font-size: 42px;
+  margin: 20px 0;
 }
 
 p {
@@ -39,6 +40,10 @@ p {
 .align-right {
   display: flex;
   justify-content: space-between;
+}
+
+.center {
+  text-align: center;
 }
 
 
@@ -283,7 +288,6 @@ li.dot{
   width: 10px;
   border: 2px solid black;
   border-radius: 50%;
-  list-style-type: none;
   margin: 0px 5px;
 
 }
@@ -363,4 +367,22 @@ form input {
   padding: 10px;
   font-size: 20px;
   margin-top: 20px;
+}
+
+
+.my-cities ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  margin-left: -20px;
+  padding: 20px;
+}
+
+.my-cities ul li:nth-child(odd){
+  background-color: #375aae;
+}
+
+.my-cities ul li p {
+  background: green;
 }
