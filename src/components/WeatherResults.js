@@ -61,7 +61,8 @@ class WeatherResults extends React.Component {
               that.setState({
                 weather: response.data,
                 loading: false,
-                allCities: allCities
+                allCities: allCities,
+                index: allCities.length-1
               });
               // const d = response.data
               console.log(response.data, 'here is the response');
@@ -110,7 +111,8 @@ class WeatherResults extends React.Component {
               that.setState({
                 weather: response.data,
                 loading: false,
-                allCities: allCities
+                allCities: allCities,
+                index: allCities.length-1
               });
               // const d = response.data
               console.log(response.data, 'here is the response');
@@ -158,6 +160,7 @@ getWeatherData(response, err){
   renderWeather(){
     //if our app is loading, show the loading icon
     console.log(this.state.allCities, 'ALL CITIES IN renderWeather');
+    console.log(this.state.index, 'index');
     var loadingIcon = this.state.loading === true ? <i className="App-logo wi wi-refresh" alt="logo" style={{fontSize: '120px', alignItems: 'center'}}> </i> :  " "
     var weatherIcon = null;
     var des = Object.keys(this.state.allCities).length > 0 ? this.state.allCities[this.state.index].weather[0].description: null;
@@ -192,8 +195,10 @@ getWeatherData(response, err){
       weatherIcon = "wi wi-rain"
     } else if (des === 'light intensity drizzle rain'){
       weatherIcon = "wi wi-rain-mix"
-    }else if (des === 'smoke'){
+    } else if (des === 'smoke'){
       weatherIcon = "wi wi-smoke"
+    } else if (des === 'light snow'){
+      weatherIcon = "wi wi-snow"
     }
 
 
@@ -251,20 +256,9 @@ getWeatherData(response, err){
               <p className="description">{selectedCity.weather[0].main}</p>
             </div>
             <div className="city">
-              <div className="top-border"></div>
+              <div className="thick-border"></div>
               <h1 className="white">{selectedCity.name} </h1>
             </div>
-
-
-
-
-            <div className ='footer' hidden>
-              <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
-              <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
-              <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
-            </div>
-
-
 
           </div> { /* End weather container */ }
 
@@ -282,9 +276,19 @@ getWeatherData(response, err){
 
 
           <div className ='footer'>
-            <p className = 'sunrise'>{moment.unix(selectedCity.sys.sunrise).format('h:mm a')}<br/> <i className="wi wi-sunrise" alt="logo"></i></p>
-            <p className = 'wind'>{selectedCity.wind.speed.toFixed(0) + ' mph'}<br/> <i className="wi wi-cloudy-gusts" alt="logo"></i></p>
-            <p className = 'sunset'>{ moment.unix(selectedCity.sys.sunset).format('h:mm a')}<br/> <i className="wi wi-sunset" alt="logo"></i></p>
+            <div className="top">
+              <p className='wind'> <i className="wi wi-cloudy-gusts" alt="logo"></i> {selectedCity.wind.speed.toFixed(0) + ' mph'} </p>
+
+              <p className='sunrise align-right'> <i className="wi wi-sunrise" alt="logo"></i> {moment.unix(selectedCity.sys.sunrise).format('h:mm a')} </p>
+            </div>
+
+            <div className="thick-border"></div>
+
+            <div className="bottom">
+              <p className='humidity'> <i className="wi wi-humidity" alt="logo"></i> {selectedCity.main.humidity} </p>
+
+              <p className='sunset align-right'> <i className="wi wi-sunset" alt="logo"></i> {moment.unix(selectedCity.sys.sunset).format('h:mm a')} </p>
+            </div>
           </div>
         { /* End main */ } </div>
 

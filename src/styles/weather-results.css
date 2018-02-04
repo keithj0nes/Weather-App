@@ -20,9 +20,20 @@ p {
 
 .main {
   background: #4571DA;
-
   padding: 20px;
   width: 100vw;
+}
+
+.thick-border {
+  height: 4px;
+  width: 100%;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.align-right {
+  display: flex;
+  justify-content: space-between;
 }
 
 .weather-container {
@@ -31,6 +42,7 @@ p {
   display: flex;
   flex-direction: column;
 }
+
 
 /***  DATE TIME  ***/
 
@@ -85,7 +97,6 @@ p {
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg);
 }
-
 
 
 /***  LEFT ICON RIGHT  ***/
@@ -151,7 +162,9 @@ p {
 
 }
 
+
   /***  ARROW  ***/
+
 
     .arrow::before,
     .arrow::after {
@@ -219,12 +232,7 @@ p {
   flex-direction: column;
 }
 
-.weather-container .city .top-border {
-  height: 4px;
-  width: 100%;
-  background-color: white;
-  border-radius: 3px;
-}
+
 
 .weather-container .city h1 {
   padding: 15px 0;
@@ -249,9 +257,9 @@ li.dot{
 
 }
 
-.forecast {
-  /*margin-top: 20px;*/
-}
+
+/***  FORECAST  ***/
+
 
 .forecast li {
   display: flex;
@@ -266,13 +274,37 @@ li.dot{
   background-color: #375aae;
 }
 
-
-
 .forecast li p {
   width: 30.33%;
   text-align: right;
-
 }
+
 .forecast li p:first-child {
   text-align: left;
+}
+
+
+/***  FOOTER  ***/
+
+
+.footer {
+  padding-top: 25px;
+}
+
+.footer .top,
+.footer .bottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.footer p {
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  width: 43%;
+}
+
+.footer p i {
+  padding-right: 10px;
 }
