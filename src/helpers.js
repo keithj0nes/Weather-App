@@ -1,4 +1,4 @@
-export function iconPicker(dayOrNight, des){
+export function iconPicker(dayOrNight, des, forecast){
   const wico = {
     day: {
       "clear sky": "wi wi-day-sunny",
@@ -89,7 +89,9 @@ export function iconPicker(dayOrNight, des){
   }
 
   let icon = null;
-  let firstLevel = wico[dayOrNight];
+  let firstLevel = null;
+  forecast ? firstLevel = wico.day : firstLevel = wico[dayOrNight];
+
   if (firstLevel !== undefined && firstLevel !== null) {
     let secondLevel = firstLevel[des];
     if (secondLevel !== undefined && secondLevel !== null) {

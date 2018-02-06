@@ -1,5 +1,6 @@
 import React from 'react';
 // import SearchWeather from './SearchWeather';
+import ErrorModal from './ErrorModal';
 import config from '../config.js';
 import axios from 'axios';
 import moment from 'moment';
@@ -17,6 +18,7 @@ class WeatherResults extends React.Component {
       baseUrl: 'http://api.openweathermap.org/data/2.5/',
       search: true,
       error: false,
+      errorMsg: '',
       loading: false,
       userZip: '',
       userCity: '',
@@ -29,6 +31,8 @@ class WeatherResults extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.renderSearch = this.renderSearch.bind(this);
     this.renderWeather = this.renderWeather.bind(this);
+    this.errorReset = this.errorReset.bind(this);
+
   }
 
 
@@ -69,24 +73,29 @@ class WeatherResults extends React.Component {
                 loading: false,
                 allCities: allCities,
                 selectedCity: response.data,
-                index: allCities.length-1
+                index: allCities.length-1,
+                userZip: '',
+                userCity: ''
               });
               console.log(response.data, 'here is the response');
-              that.setState({userZip: '', userCity: ''})
 
 
             })
             .catch(function(error) {
               that.setState({
-                error: true
+                error: true,
+                loading: false
               })
               console.log(error, 'here is the error in forcast zip');
             });
 
           })
           .catch(function(error) {
+
             that.setState({
-              error: true
+              error: true,
+              errorMsg: `Sorry, could not find results for ${that.state.userZip}`,
+              loading: false
             })
             console.log(error, 'here is the error weather zip');
           });
@@ -116,21 +125,25 @@ class WeatherResults extends React.Component {
                 loading: false,
                 allCities: allCities,
                 selectedCity: response.data,
-                index: allCities.length-1
+                index: allCities.length-1,
+                userZip: '',
+                userCity: ''
               });
               console.log(response.data, 'here is the response');
-              that.setState({userZip: '', userCity: ''})
             })
             .catch(function(error) {
               that.setState({
-                error: true
+                error: true,
+                loading: false
               })
               console.log(error, 'here is the error in forcast name');
             });
           })
           .catch(function(error) {
             that.setState({
-              error: true
+              error: true,
+              errorMsg: `Sorry, could not find results for ${that.state.userCity}`,
+              loading: false
             })
             console.log(error, 'here is the error weather name');
           });
@@ -141,12 +154,16 @@ class WeatherResults extends React.Component {
   handleInputChange(event) {
     this.setState({
       [event.target.name]: event.target.value
-    });
-    // console.log(event.target.name, event.target.value);
+    })
   }
 
-  getWeatherData(response, err){
-    console.log(response, 'getting resonse here');
+  errorReset(){
+    this.setState({
+        error: false,
+        errorMsg: '',
+        userZip: '',
+        userCity: ''
+    });
   }
 
   renderWeather(){
@@ -217,7 +234,7 @@ class WeatherResults extends React.Component {
           <ul className="forecast">
             {selectedCity.forecast.map((item, key) => {
               const foreDes = item.weather[0].description
-              const forecastIcon = iconPicker(dayOrNight, foreDes)
+              const forecastIcon = iconPicker(dayOrNight, foreDes, true)
               return (
                 <li key={key}>
                   <p>{moment.unix(item.dt).format("dddd")}</p>
@@ -265,7 +282,7 @@ class WeatherResults extends React.Component {
         <div className="thick-border"></div>
         <div className='forms'>
           <form name='userZip' onSubmit={this.handleFormSubmit}>
-            <input name='userZip' type="text" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
+            <input name='userZip' type="number" value={this.state.userZip} onChange={this.handleInputChange} placeholder='Enter Zip Code'/>
           </form>
           <form name="userCity" onSubmit={this.handleFormSubmit}>
             <input name='userCity' type="text" value={this.state.userCity} onChange={this.handleInputChange} placeholder='Enter City Name'/>
@@ -312,6 +329,8 @@ class WeatherResults extends React.Component {
 
 
       </div>
+
+      {this.state.error ? <ErrorModal errorMsg={this.state.errorMsg} error={this.state.error} errorReset={this.errorReset}/> : ''}
       </div>
     )
   }
